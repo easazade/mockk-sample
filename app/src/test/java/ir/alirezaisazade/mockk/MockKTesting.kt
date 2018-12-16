@@ -5,8 +5,6 @@ import org.hamcrest.core.IsCollectionContaining.hasItem
 import org.junit.Assert.*
 import org.junit.Test
 
-data class User(val name: String)
-
 class MockKTesting {
 
 
@@ -176,5 +174,35 @@ class MockKTesting {
         car.go()
         verify { car.go() }
     }
+
+    @Test
+    fun spy() {
+        val car = Car("some_id")
+        val spy = spyk(car)
+        every { spy.setSpeed(ofType(Int::class)) } returns 1
+        assertEquals(car.setSpeed(50), 50)
+        assertEquals(spy.setSpeed(50), 1)
+        verify { spy.setSpeed(50) }
+    }
+
+    @Test
+    fun mockingConstructor() {
+        //this way each time we create a new Object with that object Constructor
+        //its methods will behave as we mocked
+        mockkConstructor(Car::class)
+        every { anyConstructed<Car>().startEngine(any()) } returns true
+        every { anyConstructed<Car>().wheelsCount() } returns 6
+        every { anyConstructed<Car>().setSpeed(any()) } returns 10
+        assertTrue(Car("awd").startEngine("ao8787awd"))
+        assertTrue(Car("2awd").startEngine("aowmdo0"))
+        assertTrue(Car("a2w3d").startEngine("aowmd90jawd"))
+        assertEquals(Car("ak0-kd").wheelsCount(), 6)
+        assertEquals(Car("kd").wheelsCount(), 6)
+        assertEquals(Car("akw2d").wheelsCount(), 6)
+        assertEquals(Car("a9i29ei").setSpeed(78), 10)
+        assertEquals(Car("a9i29ei").setSpeed(91), 10)
+        assertEquals(Car("a9i29ei").setSpeed(2), 10)
+    }
+
 
 }
