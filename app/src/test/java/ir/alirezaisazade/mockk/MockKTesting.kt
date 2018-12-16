@@ -158,8 +158,8 @@ class MockKTesting {
 
     @Test
     fun mockingAndUnMockingObjects() {
-        val mockObject = mockkObject(SimpleSingle)
-        val num  = 2000
+        mockkObject(SimpleSingle)
+        val num = 2000
         every { SimpleSingle.randomNumberBelow1000() } returns num
         assertTrue(SimpleSingle.randomNumberBelow1000() == num)
         assertTrue(SimpleSingle.randomNumberBelow1000() == num)
@@ -167,6 +167,14 @@ class MockKTesting {
         verify { SimpleSingle.randomNumberBelow1000() }
         unmockkObject(SimpleSingle) //or use unmockkAll
         assertTrue(SimpleSingle.randomNumberBelow1000() != num)
+    }
+
+    @Test
+    fun mockMethodBehaviorWithUnitReturnType() {
+        val car = mockk<Car>()
+        every { car.go() } just runs
+        car.go()
+        verify { car.go() }
     }
 
 }
