@@ -2,10 +2,16 @@ package ir.alirezaisazade.mockk
 
 import io.mockk.*
 import org.hamcrest.core.IsCollectionContaining.hasItem
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Test
 
 class MockKTesting {
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
 
 
     @Test
@@ -225,7 +231,6 @@ class MockKTesting {
         car.startEngine("third call")
         list.forEach { println(it) }
     }
-
 
 
 }
