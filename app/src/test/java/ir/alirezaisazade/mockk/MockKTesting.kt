@@ -204,5 +204,28 @@ class MockKTesting {
         assertEquals(Car("a9i29ei").setSpeed(2), 10)
     }
 
+    @Test
+    fun capturingArgs() {
+        //You can capture an argument to a CapturingSlot or MutableList
+        val car = mockk<Car>()
+        val slot = slot<String>()
+        val list = mutableListOf<String>()
+        //capturing with slot
+        //each slot only holds one value and with it we can know itf arg was null or isCaptured
+        every { car.startEngine(capture(slot)) } answers {
+            println(slot.captured)
+            true
+        }
+        assertTrue(car.startEngine("ow0k"))
+
+        //capturing args everytime method is called and adding them to list
+        every { car.startEngine(capture(list)) } returns true
+        car.startEngine("first call")
+        car.startEngine("second call")
+        car.startEngine("third call")
+        list.forEach { println(it) }
+    }
+
+
 
 }
