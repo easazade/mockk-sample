@@ -14,4 +14,8 @@ class Car(private val driverId: String) {
 
     fun go() {}
 
+    fun drive(): String = accelerate()
+
+    private fun accelerate() = "going faster"
+
 }

@@ -88,7 +88,7 @@ class MockKTesting {
         mock.setSpeed(65)
         mock.setSpeed(80)
         //verifies that given methods are called with the given order
-        io.mockk.verifyOrder {
+        verifyOrder {
             mock.setSpeed(10)
             mock.setSpeed(65)
         }
@@ -224,12 +224,26 @@ class MockKTesting {
         }
         assertTrue(car.startEngine("ow0k"))
 
-        //capturing args everytime method is called and adding them to list
+        //capturing args every time method is called and adding them to list
         every { car.startEngine(capture(list)) } returns true
         car.startEngine("first call")
         car.startEngine("second call")
         car.startEngine("third call")
         list.forEach { println(it) }
+    }
+
+    @Test
+    fun mockingPrivateMethods(){
+        val car = Car("id")
+        val mock = spyk(car,recordPrivateCalls = true)
+
+        every { mock["accelerate"]() } returns "going not so fast"
+
+        assertEquals("going not so fast", mock.drive())
+        verifySequence {
+            mock.drive()
+            mock["accelerate"]()
+        }
     }
 
 
