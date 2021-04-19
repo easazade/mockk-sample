@@ -25,7 +25,7 @@ class MockContextTest {
     }
 
     @Test
-    fun setDiaByTextView() {
+    fun contextTest() {
         val str = "Hello World !"
 
         every {
